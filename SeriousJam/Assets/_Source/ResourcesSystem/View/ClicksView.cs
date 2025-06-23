@@ -22,7 +22,7 @@ namespace ResourcesSystem.View
         private void OnPassiveClickGained(int amount)
         {
             var created = CreateLabel(
-                Camera.main!.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)),
+                Camera.main!.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, moneyCountPrefab.transform.position.z)),
                 amount);
 
             created.GetComponent<Rigidbody2D>().AddForce(
@@ -33,7 +33,7 @@ namespace ResourcesSystem.View
         private void OnClickGained(int amount)
         {
             var created = CreateLabel(
-                Camera.main!.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)),
+                Camera.main!.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, moneyCountPrefab.transform.position.z)),
                 amount);
             
             created.GetComponent<Rigidbody2D>().AddForce(
@@ -46,9 +46,6 @@ namespace ResourcesSystem.View
             var spawned = Instantiate(moneyCountPrefab, position, Quaternion.identity);
             spawned.text = "+" + amount.ToString();
             
-            var createdPos = spawned.transform.position;
-            createdPos.z = 0;
-            spawned.transform.position = createdPos;
             return spawned;
         }
 

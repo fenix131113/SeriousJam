@@ -8,6 +8,8 @@ namespace Utils.StateMachineSystem
     {
         protected readonly Dictionary<Type, AState> _states = new();
         protected AState _currentState;
+        
+        public Type CurrentStateType => _currentState.GetType();
 
         public void Switch<T>() where T : AState
         {
@@ -16,6 +18,16 @@ namespace Utils.StateMachineSystem
             
             _currentState?.OnExit();
             _currentState = _states[typeof(T)];
+            _currentState?.OnEnter();
+        }
+        
+        public void Switch(Type stateType)
+        {
+            if(!_states.ContainsKey(stateType))
+                return;
+            
+            _currentState?.OnExit();
+            _currentState = _states[stateType];
             _currentState?.OnEnter();
         }
 

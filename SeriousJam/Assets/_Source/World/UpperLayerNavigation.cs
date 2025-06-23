@@ -30,8 +30,14 @@ namespace World
 
             if (_currentLocationIndex == 0)
                 leftMoveButton.gameObject.SetActive(false);
-            else if (_currentLocationIndex == locationsPivots.Length - 1)
+            if (_currentLocationIndex == locationsPivots.Length - 1)
                 rightMoveButton.gameObject.SetActive(false);
+        }
+
+        public void RegisterNewZone(Transform newZone)
+        {
+            locationsPivots[locationsPivots.Length] = newZone;
+            CheckButtonActivation();
         }
 
         private void OnRightMoveClick()

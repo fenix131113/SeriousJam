@@ -7,8 +7,21 @@ namespace World
         [SerializeField] private GameObject toUpperLayerButton;
         [SerializeField] private GameObject upperLayerPanel;
 
-        public void SetLowerInterfaceState(bool active) => toUpperLayerButton.SetActive(active);
+        private bool _upperUnblocked;
 
-        public void SetUpperLayerPanelState(bool active) => upperLayerPanel.SetActive(active); 
+        public void UnblockUpperLayer() => _upperUnblocked = true;
+
+        public void SetLowerInterfaceState(bool active)
+        {
+            if (!_upperUnblocked)
+            {
+                toUpperLayerButton.SetActive(false);
+                return;
+            }
+
+            toUpperLayerButton.SetActive(active);
+        }
+
+        public void SetUpperLayerPanelState(bool active) => upperLayerPanel.SetActive(active);
     }
 }

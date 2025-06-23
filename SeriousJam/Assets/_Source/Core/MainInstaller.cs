@@ -1,4 +1,7 @@
 using ResourcesSystem;
+using Upgrades;
+using Upgrades.States;
+using Upgrades.View;
 using VContainer;
 using VContainer.Unity;
 using World;
@@ -20,8 +23,14 @@ namespace Core
             #region ResourcesSystem
 
             builder.RegisterComponentInHierarchy<Clicker>();
+            builder.RegisterComponentInHierarchy<UpgradePanel>();
+            
             builder.Register<Wallet>(Lifetime.Singleton)
                 .As<ITickable>()
+                .AsSelf();
+            
+            builder.Register<UpgradesOpenManager>(Lifetime.Singleton)
+                .As<IInitializable>()
                 .AsSelf();
 
             #endregion
@@ -47,9 +56,12 @@ namespace Core
             Container.Inject(upperState);
             var transitionState = new TransitionState();
             Container.Inject(transitionState);
+            var upgradeState = new UpgradeLocationState();
+            Container.Inject(upgradeState);
             _worldTransitionStateMachine.RegisterState(lowerState);
             _worldTransitionStateMachine.RegisterState(upperState);
             _worldTransitionStateMachine.RegisterState(transitionState);
+            _worldTransitionStateMachine.RegisterState(upgradeState);
             _worldTransitionStateMachine.Switch<LowerLayerState>();
         }
     }

@@ -2,20 +2,21 @@
 using Utils.StateMachineSystem.Data;
 using VContainer;
 
-namespace World.States
+namespace Upgrades.States
 {
-    public class TransitionState : AState
+    public class UpgradeLocationState : AState
     {
         [Inject] private UpgradePanel _upgradePanel;
 
         public override void OnEnter()
         {
             _upgradePanel.SetUpgradeButtonActive(false);
+            _upgradePanel.SetCloseButtonActive(true);
         }
 
         public override void OnExit()
         {
-            _upgradePanel.SetUpgradeButtonActive(true);
+            _upgradePanel.SetCloseButtonActive(false);
         }
     }
 }
