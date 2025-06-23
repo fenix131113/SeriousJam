@@ -1,3 +1,4 @@
+using ResourcesSystem;
 using VContainer;
 using VContainer.Unity;
 using World;
@@ -9,15 +10,24 @@ namespace Core
     {
         private InputSystem_Actions _inputActions;
         private WorldTransitionStateMachine _worldTransitionStateMachine;
-        
+
         protected override void Configure(IContainerBuilder builder)
         {
             _inputActions = new InputSystem_Actions();
             _inputActions.Enable();
             builder.RegisterInstance(_inputActions).AsSelf();
 
+            #region ResourcesSystem
+
+            builder.RegisterComponentInHierarchy<Clicker>();
+            builder.Register<Wallet>(Lifetime.Singleton)
+                .As<ITickable>()
+                .AsSelf();
+
+            #endregion
+
             #region World
-            
+
             _worldTransitionStateMachine = new WorldTransitionStateMachine();
             builder.RegisterInstance(_worldTransitionStateMachine);
             builder.RegisterComponentInHierarchy<CameraScroll>();
