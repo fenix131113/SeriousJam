@@ -17,6 +17,7 @@ namespace Upgrades.View
         [SerializeField] private float switchTime;
 
         [Inject] private WorldTransitionStateMachine _stateMachine;
+        [Inject] private UpgradesOpenManager _upgradesOpenManager;
 
         private Type _previousState;
 
@@ -39,7 +40,11 @@ namespace Upgrades.View
         {
             _stateMachine.Switch<TransitionState>();
             panel.DOAnchorPos(new Vector2(0, -Screen.height), switchTime).onComplete +=
-                () => _stateMachine.Switch(_previousState);
+                () =>
+                {
+                    _stateMachine.Switch(_previousState);
+                    _upgradesOpenManager.InvokeAllOnClose();
+                };
         }
 
         private void Bind()

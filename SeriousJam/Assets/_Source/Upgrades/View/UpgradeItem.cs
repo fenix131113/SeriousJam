@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core;
+using MiniGame;
+using MiniGame.Data;
 using ResourcesSystem;
 using TMPro;
 using UnityEngine;
@@ -25,6 +27,7 @@ namespace Upgrades.View
         [Inject] private Wallet _wallet;
         [Inject] private UpgradesOpenManager _upgradesOpenManager;
         [Inject] private InfoPanel _infoPanel;
+        [Inject] private QuestionsManager _questionsManager;
         private Button _button;
 
         private void Start()
@@ -67,9 +70,11 @@ namespace Upgrades.View
             if (upgrades[Level].increaseClick)
                 GameVariables.SetMoneyPerClick(GameVariables.MoneyPerClickMultiplier +
                                                upgrades[Level].clickIncreaseAmount);
+            if (upgrades[Level].giveQuestion)
+                _questionsManager.AddQuestion(upgrades[Level].questionData);
 
             _wallet.RemoveMoney(upgrades[Level].cost);
-            upgrades[Level].onLevelUpgraded?.Invoke();
+            _upgradesOpenManager.ActivateOnCloseRegister(upgrades[Level].onLevelUpgraded);
             Level++;
             _upgradesOpenManager.CheckForUpgrades();
             DrawInfo();
@@ -108,5 +113,7 @@ namespace Upgrades.View
         [field: SerializeField] public float passiveIncreaseAmount;
         [field: SerializeField] public bool increaseClick;
         [field: SerializeField] public float clickIncreaseAmount;
+        [field: SerializeField] public bool giveQuestion;
+        [field: SerializeField] public QuestionDataSO questionData;
     }
 }

@@ -1,3 +1,5 @@
+using MiniGame;
+using MiniGame.View;
 using ResourcesSystem;
 using Upgrades;
 using Upgrades.States;
@@ -20,11 +22,19 @@ namespace Core
             _inputActions.Enable();
             builder.RegisterInstance(_inputActions).AsSelf();
 
+            #region MiniGame
+
+            builder.Register<QuestionsManager>(Lifetime.Singleton);
+            builder.RegisterComponentInHierarchy<QuestionsStartButton>();
+
+            #endregion
+            
             #region ResourcesSystem
 
-            builder.RegisterComponentInHierarchy<Clicker>();
+            builder.RegisterComponentInHierarchy<QuestionPanel>();
             builder.RegisterComponentInHierarchy<UpgradePanel>();
             builder.RegisterComponentInHierarchy<InfoPanel>();
+            builder.RegisterComponentInHierarchy<Clicker>();
             
             builder.Register<Wallet>(Lifetime.Singleton)
                 .As<ITickable>()

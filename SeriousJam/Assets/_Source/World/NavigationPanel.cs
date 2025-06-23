@@ -9,7 +9,11 @@ namespace World
 
         private bool _upperUnblocked;
 
-        public void UnblockUpperLayer() => _upperUnblocked = true;
+        public void UnblockUpperLayer()
+        {
+            _upperUnblocked = true;
+            SetLowerInterfaceState(true);
+        }
 
         public void SetLowerInterfaceState(bool active)
         {
