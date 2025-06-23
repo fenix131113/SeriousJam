@@ -24,6 +24,7 @@ namespace Core
 
             builder.RegisterComponentInHierarchy<Clicker>();
             builder.RegisterComponentInHierarchy<UpgradePanel>();
+            builder.RegisterComponentInHierarchy<InfoPanel>();
             
             builder.Register<Wallet>(Lifetime.Singleton)
                 .As<ITickable>()

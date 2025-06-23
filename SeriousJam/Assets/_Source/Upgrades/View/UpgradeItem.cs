@@ -12,16 +12,19 @@ namespace Upgrades.View
 {
     public class UpgradeItem : MonoBehaviour
     {
+        [SerializeField] private string description;
         [SerializeField] private List<UpgradeItem> needToUnlock = new();
         [SerializeField] private List<UpgradeItemGroup> upgrades = new();
         [SerializeField] private TMP_Text costLabel;
         [SerializeField] private TMP_Text levelLabel;
+        [SerializeField] private Button acceptBuyButton;
 
         public int Level { get; private set; }
         public int MaxLevel => upgrades.Count;
 
         [Inject] private Wallet _wallet;
         [Inject] private UpgradesOpenManager _upgradesOpenManager;
+        [Inject] private InfoPanel _infoPanel;
         private Button _button;
 
         private void Start()
@@ -42,7 +45,18 @@ namespace Upgrades.View
             gameObject.SetActive(true);
         }
 
+        public void DeactivateAccept() => acceptBuyButton.gameObject.SetActive(false);
+
         private void OnUpgradeClicked()
+        {
+            _upgradesOpenManager.ClearAcceptForUpgrades();
+            _infoPanel.ShowPanel(description);
+
+            if (Level < MaxLevel && _wallet.Money >= upgrades[Level].cost)
+                acceptBuyButton.gameObject.SetActive(true);
+        }
+
+        private void AcceptBuy()
         {
             if (Level == MaxLevel || _wallet.Money < upgrades[Level].cost || !needToUnlock.TrueForAll(x => x.Level > 0))
                 return;
@@ -52,7 +66,7 @@ namespace Upgrades.View
                                                 upgrades[Level].passiveIncreaseAmount);
             if (upgrades[Level].increaseClick)
                 GameVariables.SetMoneyPerClick(GameVariables.MoneyPerClickMultiplier +
-                                                upgrades[Level].clickIncreaseAmount);
+                                               upgrades[Level].clickIncreaseAmount);
 
             _wallet.RemoveMoney(upgrades[Level].cost);
             upgrades[Level].onLevelUpgraded?.Invoke();
@@ -69,11 +83,20 @@ namespace Upgrades.View
                 costLabel.text = upgrades[Level].cost.ToString();
 
             levelLabel.text = $"{Level}/{MaxLevel}";
+            DeactivateAccept();
         }
 
-        private void Bind() => _button.onClick.AddListener(OnUpgradeClicked);
+        private void Bind()
+        {
+            _button.onClick.AddListener(OnUpgradeClicked);
+            acceptBuyButton.onClick.AddListener(AcceptBuy);
+        }
 
-        private void Expose() => _button.onClick.RemoveAllListeners();
+        private void Expose()
+        {
+            _button.onClick.RemoveAllListeners();
+            acceptBuyButton.onClick.RemoveAllListeners();
+        }
     }
 
     [Serializable]

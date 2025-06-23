@@ -21,5 +21,11 @@ namespace Upgrades
             foreach (var upgrade in _allUpgrades)
                 upgrade.CheckVisibility();
         }
+
+        public void ClearAcceptForUpgrades()
+        {
+            foreach (var upgrade in _allUpgrades)
+                upgrade.DeactivateAccept();
+        }
     }
 }
