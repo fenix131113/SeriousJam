@@ -7,6 +7,7 @@ namespace ResourcesSystem.View
     public class ClicksView : MonoBehaviour
     {
         [SerializeField] private TMP_Text moneyCountPrefab;
+        [SerializeField] private RectTransform passiveDropPivot;
         [SerializeField] private float minVerticalForce = 5f;
         [SerializeField] private float maxVerticalForce = 10f;
         [SerializeField] private float minHorizontalForce = 5f;
@@ -22,7 +23,7 @@ namespace ResourcesSystem.View
         private void OnPassiveClickGained(int amount)
         {
             var created = CreateLabel(
-                Camera.main!.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, moneyCountPrefab.transform.position.z)),
+                Camera.main!.ScreenToWorldPoint(new Vector3(passiveDropPivot.anchoredPosition.x, passiveDropPivot.anchoredPosition.y, moneyCountPrefab.transform.position.z)),
                 amount);
 
             created.GetComponent<Rigidbody2D>().AddForce(

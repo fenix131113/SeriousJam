@@ -5,9 +5,12 @@ namespace Utils
 {
     public class ObjectFader : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private float fadeTime = 0.5f;
+        
+        private SpriteRenderer _spriteRenderer;
 
-        public void StartFade(bool fadeIn) => spriteRenderer.DOFade(fadeIn ? 1 : 0, fadeTime);
+        private void Awake() => _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        public void StartFade(bool fadeIn) => _spriteRenderer.DOFade(fadeIn ? 1 : 0, fadeTime);
     }
 }
